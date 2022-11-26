@@ -1,0 +1,9 @@
+{
+  "name": "Vanity",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/JereKuusela/valheim-vanity",
+  "description": "Allows admins to change visual style of any player.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.1901"
+  ]
+}
