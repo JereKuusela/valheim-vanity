@@ -209,6 +209,15 @@ public class ChangeEquipment : MonoBehaviour
       { "player", (int index) => index == 0 ? Helper.Players() : null}
     });
   }
+  private static void RegisterColorAutoComplete(string name)
+  {
+    CommandWrapper.Register(name, (int index) =>
+    {
+      return CommandWrapper.Info("Color (r,g,b)");
+    }, new() {
+      { "player", (int index) => index == 0 ? Helper.Players() : null}
+    });
+  }
   private static void CreateCommand(VisSlot slot)
   {
     RegisterAutoComplete("wear_" + SlotToString(slot));
@@ -263,27 +272,29 @@ public class ChangeEquipment : MonoBehaviour
       }
       else ServerExecution.Send(argsWithId);
     }, false, false, false, false, false);
+    RegisterColorAutoComplete("wear_skin_color");
     new Terminal.ConsoleCommand("wear_skin_color", "[r1,g1,b1] [r2,g2,b2] ... - Changes skin color. Automatically cycles between multiple values.", (Terminal.ConsoleEventArgs args) =>
     {
       SetColorValue(VisSlot.Legs, args);
     }, false, false, false, false, false);
+    RegisterColorAutoComplete("wear_hair_color");
     new Terminal.ConsoleCommand("wear_hair_color", "[r1,g1,b1] [r2,g2,b2] ... - Changes hair color. Automatically cycles between multiple values.", (Terminal.ConsoleEventArgs args) =>
     {
       SetColorValue(VisSlot.Hair, args);
     }, false, false, false, false, false);
+    RegisterAutoComplete("wear_beard", false);
     new Terminal.ConsoleCommand("wear_beard", "[name] - Changes beard.", (Terminal.ConsoleEventArgs args) =>
     {
-      RegisterAutoComplete("wear_beard", false);
       SetVisualValue(VisSlot.Beard, args);
     }, false, false, false, false, false, () => ObjectData.Beards);
+    RegisterAutoComplete("wear_hair", false);
     new Terminal.ConsoleCommand("wear_hair", "[name] - Changes hair.", (Terminal.ConsoleEventArgs args) =>
     {
-      RegisterAutoComplete("wear_hair", false);
       SetVisualValue(VisSlot.Hair, args);
     }, false, false, false, false, false, () => ObjectData.Hairs);
+    RegisterGearAutoComplete("wear_gear");
     new Terminal.ConsoleCommand("wear_gear", "[item name] [visual name] [variant = 0] - Changes visual of a specific gear.", (Terminal.ConsoleEventArgs args) =>
     {
-      RegisterGearAutoComplete("wear_gear");
       var argsWithId = AddPlayerId(args);
       var values = Parse(argsWithId, out var id);
       if (values.Length < 2) return;
@@ -299,9 +310,9 @@ public class ChangeEquipment : MonoBehaviour
       }
       else ServerExecution.Send(argsWithId);
     }, false, false, false, false, false, () => ObjectData.Items);
+    RegisterGearAutoComplete("wear_crafted");
     new Terminal.ConsoleCommand("wear_crafted", "[item name] [visual name] [variant = 0] - Changes visual of a specific gear.", (Terminal.ConsoleEventArgs args) =>
     {
-      RegisterGearAutoComplete("wear_crafted");
       var argsWithId = AddPlayerId(args);
       var values = Parse(argsWithId, out var id);
       var entry = GetEntry(id);
