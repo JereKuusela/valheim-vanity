@@ -144,6 +144,62 @@ public class VanityManager
       return;
     }
   }
+  private static VisSlot? GetSlot(ItemDrop.ItemData item)
+  {
+    switch (item.m_shared.m_itemType)
+    {
+      case ItemDrop.ItemData.ItemType.OneHandedWeapon:
+        return VisSlot.HandRight;
+      case ItemDrop.ItemData.ItemType.Bow:
+        return VisSlot.HandLeft;
+      case ItemDrop.ItemData.ItemType.Chest:
+        return VisSlot.Chest;
+      case ItemDrop.ItemData.ItemType.Helmet:
+        return VisSlot.Helmet;
+      case ItemDrop.ItemData.ItemType.Legs:
+        return VisSlot.Legs;
+      case ItemDrop.ItemData.ItemType.Shield:
+        return VisSlot.HandLeft;
+      case ItemDrop.ItemData.ItemType.Tool:
+        return VisSlot.HandRight;
+      case ItemDrop.ItemData.ItemType.Shoulder:
+        return VisSlot.Shoulder;
+      case ItemDrop.ItemData.ItemType.Torch:
+        return VisSlot.HandRight;
+      case ItemDrop.ItemData.ItemType.TwoHandedWeapon:
+        return VisSlot.HandRight;
+      case ItemDrop.ItemData.ItemType.Utility:
+        return VisSlot.Utility;
+    }
+    return null;
+  }
+  public static void OverrideItem(ItemDrop.ItemData item, ref string name, ref int variant)
+  {
+    var slot = GetSlot(item);
+    if (slot == null) return;
+    var visual = GetVisualBySlot(slot.Value);
+    if (visual != null)
+    {
+      name = visual.Item1;
+      variant = visual.Item2;
+      return;
+    }
+    if (Crafted.TryGetValue(item.m_crafterID, out var craftedGear))
+    {
+      if (craftedGear.TryGetValue(item.m_dropPrefab.name, out var crafted))
+      {
+        name = crafted.Item1;
+        variant = crafted.Item2;
+        return;
+      }
+    }
+    if (Info.gear.TryGetValue(item.m_dropPrefab.name, out var gear))
+    {
+      name = gear.Item1;
+      variant = gear.Item2;
+      return;
+    }
+  }
 
   public static void OverrideItem(VisEquipment vis, VisSlot slot, ref string name)
   {

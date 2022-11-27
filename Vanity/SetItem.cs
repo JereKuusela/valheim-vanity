@@ -112,3 +112,18 @@ public class SetHairColor
     VanityManager.OverrideHairColor(__instance, ref color);
   }
 }
+
+[HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetTooltip), typeof(ItemDrop.ItemData), typeof(int), typeof(bool))]
+public class Tooltip
+{
+  static string Postfix(string result, ItemDrop.ItemData item, bool crafting)
+  {
+    if (crafting) return result;
+    string name = "";
+    int variant = 0;
+    VanityManager.OverrideItem(item, ref name, ref variant);
+    if (variant != 0) name += " " + variant;
+    if (name != "") return result + $"\nStyle: <color=orange>{name}</color>";
+    return result;
+  }
+}
