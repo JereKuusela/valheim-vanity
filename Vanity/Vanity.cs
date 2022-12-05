@@ -65,7 +65,7 @@ public class SetCommands
       if (index == 0) return Helper.Players();
       return null;
     });
-    new Terminal.ConsoleCommand("playerid", "[player id] - Copies the player id to the clipboard.", (args) =>
+    new Terminal.ConsoleCommand("playerid", "[name] - Copies the player id to the clipboard.", (args) =>
     {
       long id = 0;
       if (args.Length > 1)

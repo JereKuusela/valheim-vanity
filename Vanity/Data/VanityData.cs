@@ -55,8 +55,8 @@ public class VanityInfo
   public Dictionary<string, Tuple<string, int>> gear = new();
   public Tuple<string, int>? helmet;
   public Tuple<string, int>? chest;
-  public Tuple<string, int>? shoulder;
   public Tuple<string, int>? legs;
+  public Tuple<string, int>? shoulder;
   public Tuple<string, int>? utility;
   public Tuple<string, int>? leftHand;
   public Tuple<string, int>? rightHand;
