@@ -20,5 +20,8 @@ Donations: [Buy me a computer](https://www.buymeacoffee.com/jerekuusela)
 
 # Changelog
 
+- v1.1
+	- Fixes a possible conflict / issue with the trader.
+
 - v1.0
 	- Initial release.

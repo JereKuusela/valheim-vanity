@@ -118,6 +118,7 @@ public class Tooltip
 {
   static string Postfix(string result, ItemDrop.ItemData item, bool crafting)
   {
+    if (item == null) return result;
     if (crafting) return result;
     string name = "";
     int variant = 0;

@@ -82,7 +82,7 @@ public class VanityManager
       case VisSlot.Utility:
         return Info.utility;
     }
-    throw new NotImplementedException();
+    return null;
   }
 
   public static Color[] GetSkinColors(Player obj) => Helper.ParseColors(Info.skinColor, obj.m_skinColor);
@@ -186,14 +186,14 @@ public class VanityManager
     }
     if (Crafted.TryGetValue(item.m_crafterID, out var craftedGear))
     {
-      if (craftedGear.TryGetValue(item.m_dropPrefab.name, out var crafted))
+      if (item.m_dropPrefab && craftedGear.TryGetValue(item.m_dropPrefab.name, out var crafted))
       {
         name = crafted.Item1;
         variant = crafted.Item2;
         return;
       }
     }
-    if (Info.gear.TryGetValue(item.m_dropPrefab.name, out var gear))
+    if (item.m_dropPrefab && Info.gear.TryGetValue(item.m_dropPrefab.name, out var gear))
     {
       name = gear.Item1;
       variant = gear.Item2;
