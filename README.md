@@ -73,6 +73,8 @@ The yaml file can also be modified with commands. This is useful in servers beca
   - `wear_skin_color 1,0,0`: Changes skin color to red.
   - `wear_skin_color 10,0,0`: Changes skin color to bright red.
   - `wear_skin_color 10,0,0 0,10,0 0,0,10`: Turns you into a light show.
+- `wear_color_duration [value] player=[id]`: Sets the color duration.
+- `wear_color_interval [value] ... player=[id]`: Sets the color update interval
 - `wear_hair [name] player=[id]`: Replaces hair.
 - `wear_beard [name] player=[id]`: Replaces beard.
 - `wear_undo`: Reverts used wear_* commands.

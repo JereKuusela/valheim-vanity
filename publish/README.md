@@ -20,6 +20,11 @@ Donations: [Buy me a computer](https://www.buymeacoffee.com/jerekuusela)
 
 # Changelog
 
+- v1.2
+	- Adds new commands `wear_color_duration` and `wear_color_interval`.
+	- Fixes not working on character selection screen.
+	- Fixes not working on servers when only installed on the client.
+
 - v1.1
 	- Fixes a possible conflict / issue with the trader.
 

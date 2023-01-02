@@ -13,6 +13,7 @@ public class VanityManager
     var id = Helper.GetPlayerID();
     Load(Info, 0);
     Load(Info, id);
+    FejdStartup.m_instance?.m_playerInstance?.GetComponent<Player>()?.SetupEquipment();
     Player.m_localPlayer?.SetupEquipment();
   }
   public static VanityInfo Info = new();

@@ -93,13 +93,14 @@ public class VanityData
   }
   public static void ToFile()
   {
-    if (ZNet.instance && !ZNet.instance.IsServer()) return;
+    if (!Vanity.ConfigSync.IsSourceOfTruth) return;
     var yaml = Serializer().Serialize(Data);
     File.WriteAllText(FilePath, yaml);
   }
 
   public static void FromFile()
   {
+    if (!Vanity.ConfigSync.IsSourceOfTruth) return;
     Vanity.VanityValue.Value = File.ReadAllText(FilePath);
   }
   public static void FromValue(string value)

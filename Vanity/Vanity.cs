@@ -11,7 +11,7 @@ public class Vanity : BaseUnityPlugin
 {
   public const string GUID = "vanity";
   public const string NAME = "Vanity";
-  public const string VERSION = "1.1";
+  public const string VERSION = "1.2";
 #nullable disable
   public static ManualLogSource Log;
   public static CustomSyncedValue<string> VanityValue;
@@ -21,6 +21,7 @@ public class Vanity : BaseUnityPlugin
   {
     DisplayName = NAME,
     CurrentVersion = VERSION,
+    MinimumRequiredVersion = VERSION,
     IsLocked = true,
   };
   public void Awake()

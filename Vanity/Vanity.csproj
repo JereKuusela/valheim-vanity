@@ -10,7 +10,6 @@
   <Target Name="ILRepacker" AfterTargets="Build" >
       <ItemGroup>
           <InputAssemblies Include="$(TargetPath)" />
-          <InputAssemblies Include="$(ProjectDir)..\..\Libs\ServerSync.dll" />
           <InputAssemblies Include="$(TargetDir)YamlDotNet.dll" />
       </ItemGroup>
       <ILRepack Parallel="true" Internalize="true" InputAssemblies="@(InputAssemblies)" TargetKind="Dll" OutputFile="$(TargetPath)" />
@@ -48,9 +47,6 @@
     </Reference>
     <Reference Include="assembly_utils_publicized.dll">
       <HintPath>..\..\Libs\assembly_utils_publicized.dll</HintPath>
-    </Reference>
-    <Reference Include="ServerSync.dll">
-      <HintPath>..\..\Libs\ServerSync.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

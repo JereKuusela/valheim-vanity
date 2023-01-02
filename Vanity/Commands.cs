@@ -134,7 +134,7 @@ public class ChangeEquipment : MonoBehaviour
     var entry = GetEntry(id);
     var previous = Get(entry, slot);
     UndoCommands.Push(values[0] + " " + previous);
-    if (ZNet.instance.IsServer())
+    if (Vanity.ConfigSync.IsSourceOfTruth)
     {
       Set(entry, slot, value);
       VanityData.ToFile();
@@ -150,9 +150,39 @@ public class ChangeEquipment : MonoBehaviour
     var previous = GetColor(entry, slot);
     UndoCommands.Push(values[0] + " " + previous);
 
-    if (ZNet.instance.IsServer())
+    if (Vanity.ConfigSync.IsSourceOfTruth)
     {
       SetColor(entry, slot, value);
+      VanityData.ToFile();
+    }
+    else ServerExecution.Send(argsWithId);
+  }
+  private static void SetDurationValue(Terminal.ConsoleEventArgs args)
+  {
+    var argsWithId = AddPlayerId(args);
+    var values = Parse(argsWithId, out var id);
+    var value = Helper.TryFloat(string.Join(" ", values.Skip(1)), 1f);
+    var entry = GetEntry(id);
+    UndoCommands.Push(values[0] + " " + entry.colorDuration);
+
+    if (Vanity.ConfigSync.IsSourceOfTruth)
+    {
+      entry.colorDuration = value;
+      VanityData.ToFile();
+    }
+    else ServerExecution.Send(argsWithId);
+  }
+  private static void SetIntervalValue(Terminal.ConsoleEventArgs args)
+  {
+    var argsWithId = AddPlayerId(args);
+    var values = Parse(argsWithId, out var id);
+    var value = Helper.TryFloat(string.Join(" ", values.Skip(1)), 1f);
+    var entry = GetEntry(id);
+    UndoCommands.Push(values[0] + " " + entry.updateInterval);
+
+    if (Vanity.ConfigSync.IsSourceOfTruth)
+    {
+      entry.updateInterval = value;
       VanityData.ToFile();
     }
     else ServerExecution.Send(argsWithId);
@@ -221,14 +251,14 @@ public class ChangeEquipment : MonoBehaviour
   private static void CreateCommand(VisSlot slot)
   {
     RegisterAutoComplete("wear_" + SlotToString(slot));
-    new Terminal.ConsoleCommand("wear_" + SlotToString(slot), "[item name] [variant = 0] - Changes visual equipment.", (Terminal.ConsoleEventArgs args) =>
+    new Terminal.ConsoleCommand("wear_" + SlotToString(slot), "[item name] [variant = 0] - Changes visual equipment.", args =>
     {
       SetVisualValue(slot, args);
-    }, false, false, false, false, false, () => ObjectData.Items);
+    }, optionsFetcher: () => ObjectData.Items);
   }
   public static void AddChangeEquipment()
   {
-    new Terminal.ConsoleCommand("wear_info", "Prints information about visual equipment.", (Terminal.ConsoleEventArgs args) =>
+    new Terminal.ConsoleCommand("wear_info", "Prints information about visual equipment.", args =>
     {
       if (Player.m_localPlayer == null) return;
       var equipment = Player.m_localPlayer.GetComponent<VisEquipment>();
@@ -246,11 +276,11 @@ public class ChangeEquipment : MonoBehaviour
       args.Context.AddString("Beard: " + equipment.m_beardItem);
       args.Context.AddString("Skin: " + equipment.m_skinColor.ToString("F2"));
       args.Context.AddString("Hair color: " + equipment.m_hairColor.ToString("F2"));
-    }, false, false, false, false, false);
-    new Terminal.ConsoleCommand("wear_reset", "Resets visual equipment.", (Terminal.ConsoleEventArgs args) =>
+    });
+    new Terminal.ConsoleCommand("wear_reset", "Resets visual equipment.", args =>
     {
       var argsWithId = AddPlayerId(args);
-      if (ZNet.instance.IsServer())
+      if (Vanity.ConfigSync.IsSourceOfTruth)
       {
         Parse(argsWithId, out var id);
         var entry = GetEntry(id);
@@ -271,29 +301,29 @@ public class ChangeEquipment : MonoBehaviour
         VanityData.ToFile();
       }
       else ServerExecution.Send(argsWithId);
-    }, false, false, false, false, false);
+    });
     RegisterColorAutoComplete("wear_skin_color");
-    new Terminal.ConsoleCommand("wear_skin_color", "[r1,g1,b1] [r2,g2,b2] ... - Changes skin color. Automatically cycles between multiple values.", (Terminal.ConsoleEventArgs args) =>
+    new Terminal.ConsoleCommand("wear_skin_color", "[r1,g1,b1] [r2,g2,b2] ... - Changes skin color. Automatically cycles between multiple values.", args =>
     {
       SetColorValue(VisSlot.Legs, args);
-    }, false, false, false, false, false);
+    });
     RegisterColorAutoComplete("wear_hair_color");
-    new Terminal.ConsoleCommand("wear_hair_color", "[r1,g1,b1] [r2,g2,b2] ... - Changes hair color. Automatically cycles between multiple values.", (Terminal.ConsoleEventArgs args) =>
+    new Terminal.ConsoleCommand("wear_hair_color", "[r1,g1,b1] [r2,g2,b2] ... - Changes hair color. Automatically cycles between multiple values.", args =>
     {
       SetColorValue(VisSlot.Hair, args);
-    }, false, false, false, false, false);
+    });
     RegisterAutoComplete("wear_beard", false);
-    new Terminal.ConsoleCommand("wear_beard", "[name] - Changes beard.", (Terminal.ConsoleEventArgs args) =>
+    new Terminal.ConsoleCommand("wear_beard", "[name] - Changes beard.", args =>
     {
       SetVisualValue(VisSlot.Beard, args);
-    }, false, false, false, false, false, () => ObjectData.Beards);
+    }, optionsFetcher: () => ObjectData.Beards);
     RegisterAutoComplete("wear_hair", false);
-    new Terminal.ConsoleCommand("wear_hair", "[name] - Changes hair.", (Terminal.ConsoleEventArgs args) =>
+    new Terminal.ConsoleCommand("wear_hair", "[name] - Changes hair.", args =>
     {
       SetVisualValue(VisSlot.Hair, args);
-    }, false, false, false, false, false, () => ObjectData.Hairs);
+    }, optionsFetcher: () => ObjectData.Hairs);
     RegisterGearAutoComplete("wear_gear");
-    new Terminal.ConsoleCommand("wear_gear", "[item name] [visual name] [variant = 0] - Changes visual of a specific gear.", (Terminal.ConsoleEventArgs args) =>
+    new Terminal.ConsoleCommand("wear_gear", "[item name] [visual name] [variant = 0] - Changes visual of a specific gear.", args =>
     {
       var argsWithId = AddPlayerId(args);
       var values = Parse(argsWithId, out var id);
@@ -303,15 +333,15 @@ public class ChangeEquipment : MonoBehaviour
         UndoCommands.Push(values[0] + " " + values[1] + " " + previous);
       else UndoCommands.Push(values[0] + " " + values[1]);
 
-      if (ZNet.instance.IsServer())
+      if (Vanity.ConfigSync.IsSourceOfTruth)
       {
         entry.gear[args[1]] = string.Join(" ", values.Skip(2));
         VanityData.ToFile();
       }
       else ServerExecution.Send(argsWithId);
-    }, false, false, false, false, false, () => ObjectData.Items);
+    }, optionsFetcher: () => ObjectData.Items);
     RegisterGearAutoComplete("wear_crafted");
-    new Terminal.ConsoleCommand("wear_crafted", "[item name] [visual name] [variant = 0] - Changes visual of a specific gear.", (Terminal.ConsoleEventArgs args) =>
+    new Terminal.ConsoleCommand("wear_crafted", "[item name] [visual name] [variant = 0] - Changes visual of a specific gear.", args =>
     {
       var argsWithId = AddPlayerId(args);
       var values = Parse(argsWithId, out var id);
@@ -320,14 +350,14 @@ public class ChangeEquipment : MonoBehaviour
         UndoCommands.Push(values[0] + " " + values[1] + " " + previous);
       else UndoCommands.Push(values[0] + " " + values[1]);
 
-      if (ZNet.instance.IsServer())
+      if (Vanity.ConfigSync.IsSourceOfTruth)
       {
         entry.crafted[values[1]] = string.Join(" ", values.Skip(2));
         VanityData.ToFile();
       }
       else ServerExecution.Send(argsWithId);
-    }, false, false, false, false, false, () => ObjectData.Items);
-    new Terminal.ConsoleCommand("wear_undo", "Reverts wear commands.", (Terminal.ConsoleEventArgs args) =>
+    }, optionsFetcher: () => ObjectData.Items);
+    new Terminal.ConsoleCommand("wear_undo", "Reverts wear commands.", args =>
     {
       if (UndoCommands.Count == 0)
       {
@@ -339,7 +369,7 @@ public class ChangeEquipment : MonoBehaviour
       // Removes the undo step caused by the undo.
       if (UndoCommands.Count > 0)
         UndoCommands.Pop();
-    }, false, false, false, false, false, () => ObjectData.Items);
+    }, optionsFetcher: () => ObjectData.Items);
     CreateCommand(VisSlot.BackLeft);
     CreateCommand(VisSlot.BackRight);
     CreateCommand(VisSlot.Chest);
@@ -349,5 +379,7 @@ public class ChangeEquipment : MonoBehaviour
     CreateCommand(VisSlot.Legs);
     CreateCommand(VisSlot.Shoulder);
     CreateCommand(VisSlot.Utility);
+    new Terminal.ConsoleCommand("wear_color_interval", "Sets the color update interval.", SetIntervalValue);
+    new Terminal.ConsoleCommand("wear_color_duration", "Sets the color duration.", SetDurationValue);
   }
 }
