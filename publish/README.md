@@ -20,6 +20,10 @@ Donations: [Buy me a computer](https://www.buymeacoffee.com/jerekuusela)
 
 # Changelog
 
+- v1.3
+	- Adds support for changing icons in the inventory to match the style.
+	- Fixes `wear_gear` not resetting the style when used without the second parameter.
+
 - v1.2
 	- Adds new commands `wear_color_duration` and `wear_color_interval`.
 	- Fixes not working on character selection screen.

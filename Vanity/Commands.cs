@@ -335,7 +335,10 @@ public class ChangeEquipment : MonoBehaviour
 
       if (Vanity.ConfigSync.IsSourceOfTruth)
       {
-        entry.gear[args[1]] = string.Join(" ", values.Skip(2));
+        if (values.Length == 2)
+          entry.gear.Remove(values[1]);
+        else
+          entry.gear[args[1]] = string.Join(" ", values.Skip(2));
         VanityData.ToFile();
       }
       else ServerExecution.Send(argsWithId);
