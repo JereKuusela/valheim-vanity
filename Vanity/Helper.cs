@@ -82,6 +82,7 @@ public static class Helper
   }
 
   public static long GetPlayerID() => Player.m_localPlayer?.GetPlayerID() ?? CharacterPreview.Id;
+
 }
 
 

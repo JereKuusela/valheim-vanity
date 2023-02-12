@@ -128,18 +128,3 @@ public class Tooltip
     return result;
   }
 }
-
-[HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetIcon)), HarmonyPriority(Priority.Last)]
-public class GetIcon
-{
-  static Sprite Postfix(Sprite result, ItemDrop.ItemData __instance)
-  {
-    string name = "";
-    int variant = 0;
-    VanityManager.OverrideItem(__instance, ref name, ref variant);
-    if (name == "") return result;
-    var data = ObjectDB.instance.GetItemPrefab(name)?.GetComponent<ItemDrop>()?.m_itemData;
-    if (data == null || data.m_shared.m_icons == null || data.m_shared.m_icons.Length <= variant) return result;
-    return data.m_shared.m_icons[variant];
-  }
-}
