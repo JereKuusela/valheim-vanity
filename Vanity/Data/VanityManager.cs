@@ -11,13 +11,16 @@ public class VanityManager
     Info = new();
     LoadCrafted();
     var id = Helper.GetPlayerID();
-    Load(Info, 0);
+    var networkId = Helper.GetNetworkId();
+    Load(Info, "Everyone");
+    Load(Info, "0");
+    Load(Info, networkId);
     Load(Info, id);
     FejdStartup.m_instance?.m_playerInstance?.GetComponent<Player>()?.SetupEquipment();
     Player.m_localPlayer?.SetupEquipment();
   }
   public static VanityInfo Info = new();
-  public static Dictionary<long, Dictionary<string, Tuple<string, int>>> Crafted = new();
+  public static Dictionary<string, Dictionary<string, Tuple<string, int>>> Crafted = new();
   public static Color? SkinColor;
   public static Color? HairColor;
   public static float ColorUpdateInterval => Info.updateInterval ?? 0.1f;
@@ -34,7 +37,7 @@ public class VanityManager
 
     }
   }
-  private static void Load(VanityInfo info, long id)
+  private static void Load(VanityInfo info, string id)
   {
     if (!VanityData.Data.TryGetValue(id, out var data)) return;
     if (!string.IsNullOrEmpty(data.beard)) info.beard = Helper.Parse(data.beard);
@@ -129,7 +132,7 @@ public class VanityManager
       variant = visual.Item2;
       return;
     }
-    if (item != null && Crafted.TryGetValue(item.m_crafterID, out var craftedGear))
+    if (item != null && Crafted.TryGetValue(item.m_crafterID.ToString(), out var craftedGear))
     {
       if (craftedGear.TryGetValue(name, out var crafted))
       {
@@ -185,7 +188,7 @@ public class VanityManager
       variant = visual.Item2;
       return;
     }
-    if (Crafted.TryGetValue(item.m_crafterID, out var craftedGear))
+    if (Crafted.TryGetValue(item.m_crafterID.ToString(), out var craftedGear))
     {
       if (item.m_dropPrefab && craftedGear.TryGetValue(item.m_dropPrefab.name, out var crafted))
       {

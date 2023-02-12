@@ -22,6 +22,7 @@ Donations: [Buy me a computer](https://www.buymeacoffee.com/jerekuusela)
 
 - v1.3
 	- Adds support for changing icons in the inventory to match the style.
+	- Adds support for Steam and Playfab ids.
 	- Fixes `wear_gear` not resetting the style when used without the second parameter.
 
 - v1.2

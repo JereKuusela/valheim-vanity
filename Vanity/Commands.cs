@@ -99,7 +99,7 @@ public class ChangeEquipment : MonoBehaviour
 
     }
   }
-  private static VanityEntry GetEntry(long id)
+  private static VanityEntry GetEntry(string id)
   {
     VanityEntry entry = new();
     if (VanityData.Data.TryGetValue(id, out var value))
@@ -114,15 +114,17 @@ public class ChangeEquipment : MonoBehaviour
     if (string.IsNullOrEmpty(name)) return args.Args.Append("player=" + Helper.GetPlayerID()).ToArray();
     return args.Args;
   }
-  private static string[] Parse(string[] args, out long id)
+  private static string[] Parse(string[] args, out string id)
   {
-    id = 0;
+    id = "";
     var name = args.FirstOrDefault(s => s.StartsWith("player=", StringComparison.OrdinalIgnoreCase));
     if (name == null) return args;
     var split = name.Split('=');
     var parsed = args.Where(s => !s.StartsWith("player=", StringComparison.OrdinalIgnoreCase)).ToArray();
     if (split.Length < 2) throw new InvalidOperationException("Missing player id");
-    if (!long.TryParse(split[1], out id))
+    if (long.TryParse(split[1], out var playerId))
+      id = playerId.ToString();
+    else
       id = Helper.GetPlayerID(split[1]);
     return parsed;
   }

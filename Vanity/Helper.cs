@@ -13,7 +13,7 @@ public static class Helper
     return VanityData.PlayerIds.Keys.Select(s => s.Replace(" ", "_")).OrderBy(s => s).ToList();
   }
   private static string Normalize(string name) => name.ToLower().Replace(" ", "_");
-  public static long GetPlayerID(string name)
+  public static string GetPlayerID(string name)
   {
     name = name.ToLower().Replace(" ", "_");
     var ids = VanityData.PlayerIds.ToDictionary(kvp => Normalize(kvp.Key), kvp => kvp.Value);
@@ -81,7 +81,8 @@ public static class Helper
     return values.Select(value => ParseColor(value, color)).ToArray();
   }
 
-  public static long GetPlayerID() => Player.m_localPlayer?.GetPlayerID() ?? CharacterPreview.Id;
+  public static string GetPlayerID() => Player.m_localPlayer?.GetPlayerID().ToString() ?? CharacterPreview.Id;
+  public static string GetNetworkId() => PrivilegeManager.PlatformUserId.ToString();
 
 }
 
@@ -90,13 +91,13 @@ public static class Helper
 [HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.SetupCharacterPreview))]
 public class CharacterPreview
 {
-  public static long Id = 0;
+  public static string Id = "";
   static void Prefix(PlayerProfile profile)
   {
     if (profile == null)
-      Id = 0;
+      Id = "";
     else
-      Id = profile.m_playerID;
+      Id = profile.m_playerID.ToString();
     VanityManager.Load();
   }
 }

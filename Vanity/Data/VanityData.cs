@@ -17,6 +17,8 @@ public class VanityEntry
   [DefaultValue("")]
   public string name = "";
   [DefaultValue("")]
+  public string player = "";
+  [DefaultValue("")]
   public string helmet = "";
   [DefaultValue("")]
   public string chest = "";
@@ -72,8 +74,8 @@ public class VanityInfo
 
 public class VanityData
 {
-  public static Dictionary<long, VanityEntry> Data = new();
-  public static Dictionary<string, long> PlayerIds = new();
+  public static Dictionary<string, VanityEntry> Data = new();
+  public static Dictionary<string, string> PlayerIds = new();
   public static string FileName = "vanity.yaml";
   public static string FilePath = Path.Combine(Paths.ConfigPath, FileName);
 
@@ -105,7 +107,7 @@ public class VanityData
   }
   public static void FromValue(string value)
   {
-    Data = Deserialize<Dictionary<long, VanityEntry>>(value, "Data") ?? new();
+    Data = Deserialize<Dictionary<string, VanityEntry>>(value, "Data") ?? new();
     PlayerIds.Clear();
     foreach (var kvp in Data)
     {
@@ -169,7 +171,7 @@ public class VanityData
     }
     return ret;
   }
-  private static bool UpdateName(long id, string name)
+  private static bool UpdateName(string id, string name)
   {
     if (Data.TryGetValue(id, out var entry))
     {
@@ -180,15 +182,30 @@ public class VanityData
     VanityData.Data[id] = new() { name = name };
     return true;
   }
+  private static bool UpdateNetworkId(string id, string networkId)
+  {
+    if (Data.TryGetValue(id, out var entry))
+    {
+      if (entry.player == networkId) return false;
+      entry.player = networkId;
+      return true;
+    }
+    VanityData.Data[id] = new() { player = networkId };
+    return true;
+  }
   public static void UpdatePlayerIds()
   {
     var zm = ZDOMan.instance;
     if (zm == null) return;
     if (!ZNet.instance || !ZNet.instance.IsServer()) return;
     var updated = false;
-    updated |= UpdateName(0, "Everyone");
+    updated |= UpdateName("Everyone", "Everyone");
     if (!ZNet.instance.IsDedicated())
-      updated |= UpdateName(Game.instance.GetPlayerProfile().GetPlayerID(), Game.instance.GetPlayerProfile().GetName());
+    {
+      updated |= UpdateName(Game.instance.GetPlayerProfile().GetPlayerID().ToString(), Game.instance.GetPlayerProfile().GetName());
+      updated |= UpdateNetworkId(Game.instance.GetPlayerProfile().GetPlayerID().ToString(), Helper.GetNetworkId());
+    }
+
     foreach (var peer in zm.m_peers)
     {
       var zdo = zm.GetZDO(peer.m_peer.m_characterID);
@@ -196,7 +213,8 @@ public class VanityData
       var id = zdo.GetLong("playerID", 0L);
       var name = zdo.GetString("playerName", "");
       if (id == 0 || name == "") continue;
-      updated |= UpdateName(id, name);
+      updated |= UpdateName(id.ToString(), name);
+      updated |= UpdateNetworkId(id.ToString(), peer.m_peer.m_rpc.GetSocket().GetHostName());
     }
     if (updated) ToFile();
   }

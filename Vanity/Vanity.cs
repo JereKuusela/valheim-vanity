@@ -68,7 +68,7 @@ public class SetCommands
     });
     new Terminal.ConsoleCommand("playerid", "[name] - Copies the player id to the clipboard.", (args) =>
     {
-      long id = 0;
+      string id = "";
       if (args.Length > 1)
       {
         id = Helper.GetPlayerID(string.Join(" ", args.Args.Skip(1)));

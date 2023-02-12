@@ -22,10 +22,15 @@ Note: Using some items can print warnings to the console but this should be harm
 Styles are saved to the config folder in file `vanity.yaml`:
 
 ```
-# Id of the character. 0 is used to apply styling for every character.
-0:
+# Identifier:
+# "Everyone" can be used to apply styling for every character.
+# Steam or PlayFab id can be used to apply styling for a specific player.
+# Character id can be used to apply styling for a specific character.
+1234:
 # Name of the character. This is automatically set to help editing the file.
-  name: Everyone
+  name: Viking
+# Steam or PlayFab id of the player. This is automatically set.
+  player: 123457
 # These replace style of a slot, regardless of which item is equipped there.
 # Item ids can be found at https://valheim.fandom.com/wiki/Item_IDs
   helmet: item_id
