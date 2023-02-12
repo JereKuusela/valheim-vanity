@@ -84,14 +84,7 @@ public class VanityData
   public static void CreateFile()
   {
     if (File.Exists(FilePath)) return;
-    var yaml = "# Example data (id 0 is used for all characters).\n#0:\n";
-    yaml += "# Replaces visual of a specific gear.\n  #gear:\n    #MaceIron: skeleton_mace\n";
-    yaml += "# Replaces visual of crafted gear.\n  #crafted:\n    #MaceIron: skeleton_mace\n";
-    yaml += "# Overrides the visual for all helmets.\n  #helmet: TrophySkeleton\n";
-    yaml += "# Adds a pulsing skin color.\n#  skinColor: 1,0,0 0,1,0 0,0,1 0,1,0\n";
-    yaml += "# How frequently the color is updated (default is 0.1).\n#  updateInterval: 0.5\n";
-    yaml += "# How long one color lasts (default is 1).\n#  colorDuration: 2\n";
-    File.WriteAllText(FilePath, yaml);
+    File.WriteAllText(FilePath, "");
   }
   public static void ToFile()
   {
