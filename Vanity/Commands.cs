@@ -147,7 +147,7 @@ public class ChangeEquipment : MonoBehaviour
   {
     var argsWithId = AddPlayerId(args);
     var values = Parse(argsWithId, out var id);
-    var value = string.Join(" ", values.Skip(1));
+    var value = string.Join(" ", values.Skip(1)).Replace(", ", ",");
     var entry = GetEntry(id);
     var previous = GetColor(entry, slot);
     UndoCommands.Push(values[0] + " " + previous);

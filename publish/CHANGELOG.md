@@ -3,6 +3,7 @@
   - Adds support for Steam and Playfab ids.
   - Fixes `wear_gear` not resetting the style when used without the second parameter.
   - Fixes config reload triggering on file metadata change.
+  - Fixes color parsing not working with extra space bars.
 
 - v1.2
   - Adds new commands `wear_color_duration` and `wear_color_interval`.
