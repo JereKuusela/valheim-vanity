@@ -40,6 +40,7 @@ public class VanityManager
   private static void Load(VanityInfo info, string id)
   {
     if (!VanityData.Data.TryGetValue(id, out var data)) return;
+    if (!string.IsNullOrEmpty(data.group)) Load(info, data.group);
     if (!string.IsNullOrEmpty(data.beard)) info.beard = Helper.Parse(data.beard);
     if (!string.IsNullOrEmpty(data.chest)) info.chest = Helper.Parse(data.chest);
     if (data.colorDuration.HasValue) info.colorDuration = data.colorDuration;

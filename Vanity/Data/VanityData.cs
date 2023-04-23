@@ -20,6 +20,8 @@ public class VanityEntry
   [DefaultValue("")]
   public string player = "";
   [DefaultValue("")]
+  public string group = "";
+  [DefaultValue("")]
   public string helmet = "";
   [DefaultValue("")]
   public string chest = "";

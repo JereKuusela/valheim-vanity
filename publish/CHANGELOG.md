@@ -1,6 +1,7 @@
 - v1.3
   - Adds support for changing icons in the inventory to match the style.
   - Adds support for Steam and Playfab ids.
+  - Adds support for groups.
   - Fixes `wear_gear` not resetting the style when used without the second parameter.
   - Fixes config reload triggering on file metadata change.
   - Fixes color parsing not working with extra space bars.

@@ -26,11 +26,15 @@ Styles are saved to the config folder in file `vanity.yaml`:
 # "Everyone" can be used to apply styling for every character.
 # Steam or PlayFab id can be used to apply styling for a specific player.
 # Character id can be used to apply styling for a specific character.
+# Everything else can be used as group name. To apply styling more easily to multiple characters.
 1234:
 # Name of the character. This is automatically set to help editing the file.
   name: Viking
 # Steam or PlayFab id of the player. This is automatically set.
   player: 123457
+# To load a group.
+# Note: Groups can also load an another group.
+  group: groupname.
 # These replace style of a slot, regardless of which item is equipped there.
 # Item ids can be found at https://valheim.fandom.com/wiki/Item_IDs
   helmet: item_id
