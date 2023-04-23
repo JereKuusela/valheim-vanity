@@ -4,6 +4,7 @@
   - Fixes `wear_gear` not resetting the style when used without the second parameter.
   - Fixes config reload triggering on file metadata change.
   - Fixes color parsing not working with extra space bars.
+  - Fixes item style not working (format was `id,variant` instead of `id variant`, now both work).
 
 - v1.2
   - Adds new commands `wear_color_duration` and `wear_color_interval`.

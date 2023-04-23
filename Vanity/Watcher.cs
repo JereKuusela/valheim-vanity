@@ -42,9 +42,8 @@ namespace Service
     }
     public static void Setup(string file, Action action)
     {
-      var folder = Path.GetDirectoryName(file);
       var pattern = Path.GetFileName(file);
-      Setup(folder, pattern, action);
+      Setup(Paths.ConfigPath, pattern, action);
     }
     public static void Setup(ConfigFile config, ManualLogSource logger)
     {

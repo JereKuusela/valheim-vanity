@@ -60,7 +60,8 @@ public static class Helper
 
   public static Tuple<string, int> Parse(string value)
   {
-    var split = value.Split(',').Select(s => s.Trim()).ToArray();
+    var separators = new char[] { ',', ' ' };
+    var split = value.Split(separators, StringSplitOptions.RemoveEmptyEntries).ToArray();
     var name = split[0];
     var variant = Helper.TryInt(split, 1, 0);
     return new(name, variant);
