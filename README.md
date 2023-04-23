@@ -89,3 +89,22 @@ The yaml file can also be modified with commands. This is useful in servers beca
 - `wear_undo`: Reverts used wear_* commands.
 - `wear_reset`: Resets visual styles (except specific gears).
 - `wear_info`: Displays item names of current visual styles.
+
+# Examples
+
+```
+pvp:
+  helmet: HelmetBronze
+pvp_red:
+  shoulder: CapeLinen 0
+  group: pvp
+pvp_green:
+  shoulder: CapeLinen 1
+  group: pvp
+1234:
+  name: Jere
+  group: pvp_red
+4321:
+  name: Viking
+  group: pvp_green
+```
