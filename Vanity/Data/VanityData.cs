@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using BepInEx;
+using Service;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -112,19 +113,9 @@ public class VanityData
   }
   public static void SetupWatcher()
   {
-    SetupWatcher(FileName, FromFile);
+    Watcher.Setup(FileName, FromFile);
   }
-  public static void SetupWatcher(string pattern, Action action)
-  {
-    FileSystemWatcher watcher = new(Paths.ConfigPath, pattern);
-    watcher.Created += (s, e) => action();
-    watcher.Changed += (s, e) => action();
-    watcher.Renamed += (s, e) => action();
-    watcher.Deleted += (s, e) => action();
-    watcher.IncludeSubdirectories = true;
-    watcher.SynchronizingObject = ThreadingHelper.SynchronizingObject;
-    watcher.EnableRaisingEvents = true;
-  }
+
   public static IDeserializer Deserializer() => new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance)
     .WithTypeConverter(new FloatConverter()).Build();
   public static IDeserializer DeserializerUnSafe() => new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance)
