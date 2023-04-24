@@ -66,6 +66,11 @@ public static class Helper
     var variant = Helper.TryInt(split, 1, 0);
     return new(name, variant);
   }
+  public static string[] ParseGroups(string value)
+  {
+    var separators = new char[] { ',', ' ' };
+    return value.Split(separators, StringSplitOptions.RemoveEmptyEntries).ToArray();
+  }
   public static Color ParseColor(string value, Color baseColor)
   {
     var split = value.Split(',');
@@ -83,7 +88,7 @@ public static class Helper
   }
 
   public static string GetPlayerID() => Player.m_localPlayer?.GetPlayerID().ToString() ?? CharacterPreview.Id;
-  public static string GetNetworkId() => PrivilegeManager.PlatformUserId.ToString();
+  public static string GetNetworkId() => PrivilegeManager.privilegeData == null ? "0" : PrivilegeManager.PlatformUserId.ToString();
 
 }
 

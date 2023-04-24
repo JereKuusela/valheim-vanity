@@ -24,6 +24,7 @@ public class Vanity : BaseUnityPlugin
     MinimumRequiredVersion = "1.2",
     IsLocked = true,
   };
+
   public void Awake()
   {
     Log = Logger;
@@ -79,4 +80,17 @@ public class SetCommands
       GUIUtility.systemCopyBuffer = id.ToString();
     }, optionsFetcher: () => Helper.Players());
   }
+}
+
+[HarmonyPatch(typeof(ZNet), nameof(ZNet.Awake))]
+public class DisableServerSync
+{
+  static void Finalizer(ZNet __instance)
+  {
+    if (__instance.IsDedicated() || !__instance.IsServer()) return;
+    // For self hosting disable server sync.
+    Vanity.Log.LogInfo("Self hosting detected, disabling server sync.");
+    AccessTools.Field(typeof(ConfigSync), "isServer").SetValue(null, false);
+  }
+
 }

@@ -6,6 +6,7 @@
   - Fixes config reload triggering on file metadata change.
   - Fixes color parsing not working with extra space bars.
   - Fixes item style not working (format was `id,variant` instead of `id variant`, now both work).
+  - Fixes self-hosting acting as a server (locks other clients configuration). Maybe works, maybe doesn't.
 
 - v1.2
   - Adds new commands `wear_color_duration` and `wear_color_interval`.
