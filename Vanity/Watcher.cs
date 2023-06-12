@@ -9,27 +9,18 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 
-namespace Service
-{
-  public class Watcher
-  {
-    static Dictionary<string, byte[]> hashes = new();
-    private static byte[] GetHash(string path)
-    {
+namespace Service {
+  public class Watcher {
+    static readonly Dictionary<string, byte[]> hashes = new();
+    private static byte[] GetHash(string path) {
 
-      using (var md5 = MD5.Create())
-      {
-        using (var stream = File.OpenRead(path))
-        {
-          return md5.ComputeHash(stream);
-        }
-      }
+      using var md5 = MD5.Create();
+      using var stream = File.OpenRead(path);
+      return md5.ComputeHash(stream);
     }
-    public static void Setup(string folder, string pattern, Action action)
-    {
+    public static void Setup(string folder, string pattern, Action action) {
       FileSystemWatcher watcher = new(folder, pattern);
-      watcher.Changed += (s, e) =>
-      {
+      watcher.Changed += (s, e) => {
         var hash = GetHash(e.FullPath);
         if (hashes.ContainsKey(e.FullPath) && hashes[e.FullPath].SequenceEqual(hash))
           return;
@@ -40,26 +31,20 @@ namespace Service
       watcher.SynchronizingObject = ThreadingHelper.SynchronizingObject;
       watcher.EnableRaisingEvents = true;
     }
-    public static void Setup(string file, Action action)
-    {
+    public static void Setup(string file, Action action) {
       var pattern = Path.GetFileName(file);
       Setup(Paths.ConfigPath, pattern, action);
     }
-    public static void Setup(ConfigFile config, ManualLogSource logger)
-    {
+    public static void Setup(ConfigFile config, ManualLogSource logger) {
       var path = config.ConfigFilePath;
       var folder = Path.GetDirectoryName(path);
       var pattern = Path.GetFileName(path);
-      Setup(folder, pattern, () =>
-      {
+      Setup(folder, pattern, () => {
         if (!File.Exists(config.ConfigFilePath)) return;
-        try
-        {
+        try {
           logger.LogDebug("ReadConfigValues called");
           config.Reload();
-        }
-        catch
-        {
+        } catch {
           logger.LogError($"There was an issue loading your {config.ConfigFilePath}");
           logger.LogError("Please check your config entries for spelling and format!");
         }

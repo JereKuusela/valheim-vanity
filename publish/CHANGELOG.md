@@ -1,3 +1,6 @@
+- v1.4
+  - Updated for the new game version.
+
 - v1.3
   - Adds support for changing icons in the inventory to match the style.
   - Adds support for Steam and Playfab ids.

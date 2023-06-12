@@ -6,15 +6,12 @@ using HarmonyLib;
 using UnityEngine;
 
 namespace Vanity;
-public static class Helper
-{
-  public static List<string> Players()
-  {
+public static class Helper {
+  public static List<string> Players() {
     return VanityData.PlayerIds.Keys.Select(s => s.Replace(" ", "_")).OrderBy(s => s).ToList();
   }
   private static string Normalize(string name) => name.ToLower().Replace(" ", "_");
-  public static string GetPlayerID(string name)
-  {
+  public static string GetPlayerID(string name) {
     name = name.ToLower().Replace(" ", "_");
     var ids = VanityData.PlayerIds.ToDictionary(kvp => Normalize(kvp.Key), kvp => kvp.Value);
     if (ids.TryGetValue(name, out var id)) return id;
@@ -28,51 +25,43 @@ public static class Helper
   public static bool IsLocalPlayer(Player obj) => obj && (obj == Player.m_localPlayer || obj.GetZDOID() == ZDOID.None);
   public static bool IsTrophy(ItemDrop.ItemData item) => item != null && Helper.Name(item).ToLower().Contains("trophy");
   public static string Name(ItemDrop.ItemData item) => item?.m_dropPrefab?.name ?? "";
-  public static ItemDrop.ItemData? GetEquippedTrophy(Inventory? inventory)
-  {
+  public static ItemDrop.ItemData? GetEquippedTrophy(Inventory? inventory) {
     if (inventory == null) return null;
     var items = inventory.m_inventory;
     if (items == null) return null;
-    return items.FirstOrDefault(item => Helper.IsTrophy(item) && item.m_equiped);
+    return items.FirstOrDefault(item => Helper.IsTrophy(item) && item.m_equipped);
   }
-  public static float TryFloat(string arg, float defaultValue = 1)
-  {
+  public static float TryFloat(string arg, float defaultValue = 1) {
     if (!float.TryParse(arg, NumberStyles.Float, CultureInfo.InvariantCulture, out var result))
       return defaultValue;
     return result;
   }
-  public static float TryFloat(string[] args, int index, float defaultValue = 1)
-  {
+  public static float TryFloat(string[] args, int index, float defaultValue = 1) {
     if (index >= args.Length) return defaultValue;
     return TryFloat(args[index], defaultValue);
   }
-  public static int TryInt(string arg, int defaultValue = 1)
-  {
+  public static int TryInt(string arg, int defaultValue = 1) {
     if (!int.TryParse(arg, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result))
       return defaultValue;
     return result;
   }
-  public static int TryInt(string[] args, int index, int defaultValue = 1)
-  {
+  public static int TryInt(string[] args, int index, int defaultValue = 1) {
     if (index >= args.Length) return defaultValue;
     return TryInt(args[index], defaultValue);
   }
 
-  public static Tuple<string, int> Parse(string value)
-  {
+  public static Tuple<string, int> Parse(string value) {
     var separators = new char[] { ',', ' ' };
     var split = value.Split(separators, StringSplitOptions.RemoveEmptyEntries).ToArray();
     var name = split[0];
     var variant = Helper.TryInt(split, 1, 0);
     return new(name, variant);
   }
-  public static string[] ParseGroups(string value)
-  {
+  public static string[] ParseGroups(string value) {
     var separators = new char[] { ',', ' ' };
     return value.Split(separators, StringSplitOptions.RemoveEmptyEntries).ToArray();
   }
-  public static Color ParseColor(string value, Color baseColor)
-  {
+  public static Color ParseColor(string value, Color baseColor) {
     var split = value.Split(',');
     Color color = baseColor;
     color.r = Helper.TryFloat(split, 0, color.r);
@@ -80,8 +69,7 @@ public static class Helper
     color.b = Helper.TryFloat(split, 2, color.b);
     return color;
   }
-  public static Color[] ParseColors(string value, Vector3 baseColor)
-  {
+  public static Color[] ParseColors(string value, Vector3 baseColor) {
     var values = value.Split(' ');
     Color color = new(baseColor.x, baseColor.y, baseColor.z);
     return values.Select(value => ParseColor(value, color)).ToArray();
@@ -95,11 +83,9 @@ public static class Helper
 
 
 [HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.SetupCharacterPreview))]
-public class CharacterPreview
-{
+public class CharacterPreview {
   public static string Id = "";
-  static void Prefix(PlayerProfile profile)
-  {
+  static void Prefix(PlayerProfile profile) {
     if (profile == null)
       Id = "";
     else
@@ -109,10 +95,8 @@ public class CharacterPreview
 }
 
 [HarmonyPatch(typeof(Player), nameof(Player.Awake))]
-public class LoadVanity
-{
-  static void Postfix()
-  {
+public class LoadVanity {
+  static void Postfix() {
     VanityManager.Load();
   }
 }
