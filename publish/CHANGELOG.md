@@ -1,3 +1,6 @@
+- v1.5
+  - Fixed for the new update.
+
 - v1.4
   - Updated for the new game version.
 
@@ -18,6 +21,3 @@
 
 - v1.1
   - Fixes a possible conflict / issue with the trader.
-
-- v1.0
-  - Initial release.
