@@ -8,11 +8,11 @@ Install on the server to enforce styles.
 
 The changes done by the mod are visible to un-modded clients.
 
-# Usage
+## Usage
 
 See [documentation](https://github.com/JereKuusela/valheim-vanity/blob/main/README.md).
 
-# Credits
+## Credits
 
 Sources: [GitHub](https://github.com/JereKuusela/valheim-vanity)
 

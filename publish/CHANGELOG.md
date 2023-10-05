@@ -1,3 +1,6 @@
+- v1.7
+  - Fixed for the new update.
+
 - v1.6
   - Fixed for the new update.
 
@@ -16,11 +19,3 @@
   - Fixes color parsing not working with extra space bars.
   - Fixes item style not working (format was `id,variant` instead of `id variant`, now both work).
   - Fixes self-hosting acting as a server (locks other clients configuration). Maybe works, maybe doesn't.
-
-- v1.2
-  - Adds new commands `wear_color_duration` and `wear_color_interval`.
-  - Fixes not working on character selection screen.
-  - Fixes not working on servers when only installed on the client.
-
-- v1.1
-  - Fixes a possible conflict / issue with the trader.
