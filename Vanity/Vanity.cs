@@ -11,7 +11,7 @@ public class Vanity : BaseUnityPlugin
 {
   public const string GUID = "vanity";
   public const string NAME = "Vanity";
-  public const string VERSION = "1.7";
+  public const string VERSION = "1.8";
 #nullable disable
   public static ManualLogSource Log;
   public static CustomSyncedValue<string> VanityValue;
@@ -88,7 +88,6 @@ public class DisableServerSync
   static void Finalizer(ZNet __instance)
   {
     if (__instance.IsDedicated() || !__instance.IsServer()) return;
-    // For self hosting disable server sync.
     Vanity.Log.LogInfo("Self hosting detected, disabling server sync.");
     AccessTools.Field(typeof(ConfigSync), "isServer").SetValue(null, false);
   }

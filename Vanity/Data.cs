@@ -15,7 +15,7 @@ public class ObjectDB_Awake
 
 public class ObjectData
 {
-  public static List<string> Beards = new();
-  public static List<string> Hairs = new();
-  public static List<string> Items = new();
+  public static List<string> Beards = [];
+  public static List<string> Hairs = [];
+  public static List<string> Items = [];
 }

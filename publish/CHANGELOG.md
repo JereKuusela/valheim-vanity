@@ -1,3 +1,9 @@
+- v1.9
+  - Fixes the command `wear_reset` not affecting right hand weapon.
+
+- v1.8
+  - Fixes weapons losing their style when put on the back.
+
 - v1.7
   - Fixed for the new update.
 

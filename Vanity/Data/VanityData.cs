@@ -51,13 +51,13 @@ public class VanityEntry
   public float? updateInterval = null;
   [DefaultValue(null)]
   public float? colorDuration = null;
-  public Dictionary<string, string> gear = new();
-  public Dictionary<string, string> crafted = new();
+  public Dictionary<string, string> gear = [];
+  public Dictionary<string, string> crafted = [];
 }
 
 public class VanityInfo
 {
-  public Dictionary<string, Tuple<string, int>> gear = new();
+  public Dictionary<string, Tuple<string, int>> gear = [];
   public Tuple<string, int>? helmet;
   public Tuple<string, int>? chest;
   public Tuple<string, int>? legs;
@@ -77,8 +77,8 @@ public class VanityInfo
 
 public class VanityData
 {
-  public static Dictionary<string, VanityEntry> Data = new();
-  public static Dictionary<string, string> PlayerIds = new();
+  public static Dictionary<string, VanityEntry> Data = [];
+  public static Dictionary<string, string> PlayerIds = [];
   public static string FileName = "vanity.yaml";
   public static string FilePath = Path.Combine(Paths.ConfigPath, FileName);
 
@@ -103,7 +103,7 @@ public class VanityData
   }
   public static void FromValue(string value)
   {
-    Data = Deserialize<Dictionary<string, VanityEntry>>(value, "Data") ?? new();
+    Data = Deserialize<Dictionary<string, VanityEntry>>(value, "Data") ?? [];
     PlayerIds.Clear();
     foreach (var kvp in Data)
     {
@@ -147,7 +147,7 @@ public class VanityData
 
   public static Dictionary<long, T> Read<T>(string pattern)
   {
-    Dictionary<long, T> ret = new();
+    Dictionary<long, T> ret = [];
     foreach (var name in Directory.GetFiles(Paths.ConfigPath, pattern))
     {
       var data = Deserialize<Dictionary<long, T>>(File.ReadAllText(name), name);
@@ -196,8 +196,8 @@ public class VanityData
     {
       var zdo = zm.GetZDO(peer.m_peer.m_characterID);
       if (zdo == null) return;
-      var id = zdo.GetLong("playerID", 0L);
-      var name = zdo.GetString("playerName", "");
+      var id = zdo.GetLong(ZDOVars.s_playerID);
+      var name = zdo.GetString(ZDOVars.s_playerName);
       if (id == 0 || name == "") continue;
       updated |= UpdateName(id.ToString(), name);
       updated |= UpdateNetworkId(id.ToString(), peer.m_peer.m_rpc.GetSocket().GetHostName());

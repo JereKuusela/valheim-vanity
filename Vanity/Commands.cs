@@ -217,7 +217,7 @@ public class ChangeEquipment : MonoBehaviour
       if (index == 0) return ObjectData.Items;
       if (index == 1) return ObjectData.Items;
       if (index == 2) return CommandWrapper.Info("Item variant (number).");
-      return new() { "player" };
+      return ["player"];
     }, new() {
       { "player", (int index) => index == 0 ? Helper.Players() : null}
     });
@@ -228,7 +228,7 @@ public class ChangeEquipment : MonoBehaviour
     {
       if (index == 0) return ObjectData.Items;
       if (index == 1 && variant) return CommandWrapper.Info("Item variant (number).");
-      return new() { "player" };
+      return ["player"];
     }, new() {
       { "player", (int index) => index == 0 ? Helper.Players() : null}
     });
@@ -284,6 +284,7 @@ public class ChangeEquipment : MonoBehaviour
         Set(entry, VisSlot.Chest, "");
         Set(entry, VisSlot.Hair, "");
         Set(entry, VisSlot.HandLeft, "");
+        Set(entry, VisSlot.HandRight, "");
         Set(entry, VisSlot.Helmet, "");
         Set(entry, VisSlot.Helmet, "");
         Set(entry, VisSlot.Legs, "");
