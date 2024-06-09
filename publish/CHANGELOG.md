@@ -1,4 +1,5 @@
 - v1.9
+  - Fixes the admin check not always working. Thanks jardhu!
   - Fixes the command `wear_reset` not affecting right hand weapon.
 
 - v1.8
