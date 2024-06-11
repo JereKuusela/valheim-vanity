@@ -1,3 +1,6 @@
+- v1.11
+  - Fixed for the new update.
+
 - v1.10
   - Fixed for the new update.
 
