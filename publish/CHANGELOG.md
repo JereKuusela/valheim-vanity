@@ -1,3 +1,6 @@
+- v1.13
+  - Fixes error on dedicated server.
+
 - v1.12
   - Fixed for the new update.
 

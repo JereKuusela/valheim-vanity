@@ -81,7 +81,7 @@ public static class Helper
   }
 
   public static string GetPlayerID() => Player.m_localPlayer?.GetPlayerID().ToString() ?? CharacterPreview.Id;
-  public static string GetNetworkId() => PrivilegeManager.privilegeData == null ? "0" : PrivilegeManager.PlatformUserId.ToString();
+  public static string GetNetworkId() => PrivilegeManager.privilegeData == null ? "0" : PrivilegeManager.PlatformUserId ?? "0";
 
 }
 
