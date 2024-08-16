@@ -16,8 +16,11 @@ public class VanityManager
     Load(Info, "0");
     Load(Info, networkId);
     Load(Info, id);
-    FejdStartup.m_instance?.m_playerInstance?.GetComponent<Player>()?.SetupEquipment();
-    Player.m_localPlayer?.SetupEquipment();
+    if (Game.instance && Game.instance.m_shuttingDown) return;
+    if (FejdStartup.m_instance && FejdStartup.m_instance.m_playerInstance)
+      FejdStartup.m_instance.m_playerInstance.GetComponent<Player>()?.SetupEquipment();
+    if (Player.m_localPlayer)
+      Player.m_localPlayer.SetupEquipment();
   }
   public static VanityInfo Info = new();
   public static Dictionary<string, Dictionary<string, Tuple<string, int>>> Crafted = [];

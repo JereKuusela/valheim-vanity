@@ -1,3 +1,6 @@
+- v1.14
+  - Fixes compatibility issue with Marketplace mod.
+
 - v1.13
   - Fixes error on dedicated server.
 
