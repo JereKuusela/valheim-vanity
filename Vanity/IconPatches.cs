@@ -33,8 +33,8 @@ public class IconPatches
   [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.UpdateRecipe)), HarmonyPostfix, HarmonyPriority(Priority.Last)]
   static void UpdateRecipe(InventoryGui __instance)
   {
-    if (!__instance.m_selectedRecipe.Key) return;
-    var item = __instance.m_selectedRecipe.Key.m_item.m_itemData;
+    var item = __instance.m_selectedRecipe.ItemData;
+    if (item == null) return;
     __instance.m_recipeIcon.sprite = OverrideItem(item) ?? __instance.m_recipeIcon.sprite;
   }
 }
