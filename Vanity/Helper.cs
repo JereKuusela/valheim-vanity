@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using HarmonyLib;
+using Splatform;
 using UnityEngine;
 
 namespace Vanity;
@@ -81,8 +82,7 @@ public static class Helper
   }
 
   public static string GetPlayerID() => Player.m_localPlayer?.GetPlayerID().ToString() ?? CharacterPreview.Id;
-  public static string GetNetworkId() => PrivilegeManager.privilegeData == null ? "0" : PrivilegeManager.PlatformUserId ?? "0";
-
+  public static string GetNetworkId() => PlatformManager.DistributionPlatform.LocalUser?.PlatformUserID.ToString() ?? "0";
 }
 
 
