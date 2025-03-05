@@ -1,9 +1,10 @@
 {
   "name": "Vanity",
-  "version_number": "1.17.0",
+  "version_number": "1.18.0",
   "website_url": "https://github.com/JereKuusela/valheim-vanity",
   "description": "Allows admins to change visual style of players.",
   "dependencies": [
-    "denikson-BepInExPack_Valheim-5.4.2202"
+    "denikson-BepInExPack_Valheim-5.4.2202",
+    "ValheimModding-YamlDotNet-16.3.0"
   ]
 }

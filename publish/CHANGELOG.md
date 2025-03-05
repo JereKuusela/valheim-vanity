@@ -1,3 +1,7 @@
+- v1.18
+  - Adds dependency to YamlDotnet package.
+  - Fixed for the new game version.
+
 - v1.17
   - Fixed for the new game version.
 

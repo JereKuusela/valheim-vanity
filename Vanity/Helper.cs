@@ -82,7 +82,7 @@ public static class Helper
   }
 
   public static string GetPlayerID() => Player.m_localPlayer?.GetPlayerID().ToString() ?? CharacterPreview.Id;
-  public static string GetNetworkId() => PlatformManager.DistributionPlatform.LocalUser?.PlatformUserID.ToString() ?? "0";
+  public static string GetNetworkId() => PlatformManager.DistributionPlatform?.LocalUser?.PlatformUserID.ToString() ?? "0";
 }
 
 
