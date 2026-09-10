@@ -8,11 +8,11 @@ public class IconPatches
 {
   static Sprite? OverrideItem(ItemDrop.ItemData item)
   {
-    string name = "";
+    int itemHash = 0;
     int variant = 0;
-    VanityManager.OverrideItem(item, ref name, ref variant);
-    if (name == "") return null;
-    var data = ObjectDB.instance.GetItemPrefab(name)?.GetComponent<ItemDrop>()?.m_itemData;
+    VanityManager.OverrideItem(item, ref itemHash, ref variant);
+    if (itemHash == 0) return null;
+    var data = ObjectDB.instance.GetItemPrefab(itemHash)?.GetComponent<ItemDrop>()?.m_itemData;
     if (data == null || data.m_shared.m_icons == null || data.m_shared.m_icons.Length <= variant) return null;
     return data.m_shared.m_icons[variant];
   }

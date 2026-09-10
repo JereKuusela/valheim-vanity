@@ -23,7 +23,7 @@ public class VanityManager
       Player.m_localPlayer.SetupEquipment();
   }
   public static VanityInfo Info = new();
-  public static Dictionary<string, Dictionary<string, Tuple<string, int>>> Crafted = [];
+  public static Dictionary<string, Dictionary<int, Tuple<int, int>>> Crafted = [];
   public static Color? SkinColor;
   public static Color? HairColor;
   public static float ColorUpdateInterval => Info.updateInterval ?? 0.1f;
@@ -36,7 +36,7 @@ public class VanityManager
       if (!Crafted.ContainsKey(entry.Key))
         Crafted[entry.Key] = [];
       foreach (var crafted in entry.Value.crafted)
-        Crafted[entry.Key][crafted.Key] = Helper.Parse(crafted.Value);
+        Crafted[entry.Key][crafted.Key.GetStableHashCode()] = Helper.Parse(crafted.Value);
 
     }
   }
@@ -65,36 +65,35 @@ public class VanityManager
     if (data.updateInterval.HasValue) info.updateInterval = data.updateInterval;
     if (!string.IsNullOrEmpty(data.utility)) info.utility = Helper.Parse(data.utility);
     foreach (var gear in data.gear)
-      info.gear[gear.Key] = Helper.Parse(gear.Value);
+      info.gear[gear.Key.GetStableHashCode()] = Helper.Parse(gear.Value);
   }
 
-  public static Tuple<string, int>? GetVisualBySlot(VisSlot slot)
+  public static Tuple<int, int>? GetVisualBySlot(VisSlot slot)
   {
     return slot switch
     {
       VisSlot.BackLeft => Info.leftBack,
       VisSlot.BackRight => Info.rightBack,
-      VisSlot.Beard => Info.beard,
       VisSlot.Chest => Info.chest,
-      VisSlot.Hair => Info.hair,
       VisSlot.HandLeft => Info.leftHand,
       VisSlot.HandRight => Info.rightHand,
       VisSlot.Helmet => Info.helmet,
       VisSlot.Legs => Info.legs,
       VisSlot.Shoulder => Info.shoulder,
       VisSlot.Utility => Info.utility,
+      VisSlot.Beard => Info.beard,
+      VisSlot.Hair => Info.hair,
       _ => null,
     };
   }
-
   public static Color[] GetSkinColors(Player obj) => Helper.ParseColors(Info.skinColor, obj.m_skinColor);
   public static Color[] GetHairColors(Player obj) => Helper.ParseColors(Info.hairColor, obj.m_hairColor);
   private static ItemDrop.ItemData? GetEquipment(Player player, VisSlot slot)
   {
     return slot switch
     {
-      VisSlot.BackLeft => player.m_leftItem,
-      VisSlot.BackRight => player.m_rightItem,
+      VisSlot.BackLeft => player.m_hiddenLeftItem ?? player.m_leftItem,
+      VisSlot.BackRight => player.m_hiddenRightItem ?? player.m_rightItem,
       VisSlot.Beard => null,
       VisSlot.Chest => player.m_chestItem,
       VisSlot.Hair => null,
@@ -107,7 +106,7 @@ public class VanityManager
       _ => throw new NotImplementedException(),
     };
   }
-  public static void OverrideItem(VisEquipment vis, VisSlot slot, ref string name, ref int variant)
+  public static void OverrideItem(VisEquipment vis, VisSlot slot, ref int itemHash, ref int variant)
   {
     if (!Helper.IsLocalPlayer(vis)) return;
     var player = vis.GetComponent<Player>();
@@ -115,22 +114,22 @@ public class VanityManager
     var visual = GetVisualBySlot(slot);
     if (visual != null)
     {
-      name = visual.Item1;
+      itemHash = visual.Item1;
       variant = visual.Item2;
       return;
     }
     if (item != null && Crafted.TryGetValue(item.m_crafterID.ToString(), out var craftedGear))
     {
-      if (craftedGear.TryGetValue(name, out var crafted))
+      if (craftedGear.TryGetValue(itemHash, out var crafted))
       {
-        name = crafted.Item1;
+        itemHash = crafted.Item1;
         variant = crafted.Item2;
         return;
       }
     }
-    if (Info.gear.TryGetValue(name, out var gear))
+    if (Info.gear.TryGetValue(itemHash, out var gear))
     {
-      name = gear.Item1;
+      itemHash = gear.Item1;
       variant = gear.Item2;
       return;
     }
@@ -153,38 +152,39 @@ public class VanityManager
       _ => null,
     };
   }
-  public static void OverrideItem(ItemDrop.ItemData item, ref string name, ref int variant)
+  public static void OverrideItem(ItemDrop.ItemData item, ref int itemHash, ref int variant)
   {
     var slot = GetSlot(item);
     if (slot == null) return;
     var visual = GetVisualBySlot(slot.Value);
     if (visual != null)
     {
-      name = visual.Item1;
+      itemHash = visual.Item1;
       variant = visual.Item2;
       return;
     }
+    var hash = item.m_dropPrefab ? item.m_dropPrefab.name.GetStableHashCode() : 0;
     if (Crafted.TryGetValue(item.m_crafterID.ToString(), out var craftedGear))
     {
-      if (item.m_dropPrefab && craftedGear.TryGetValue(item.m_dropPrefab.name, out var crafted))
+      if (item.m_dropPrefab && craftedGear.TryGetValue(hash, out var crafted))
       {
-        name = crafted.Item1;
+        itemHash = crafted.Item1;
         variant = crafted.Item2;
         return;
       }
     }
-    if (item.m_dropPrefab && Info.gear.TryGetValue(item.m_dropPrefab.name, out var gear))
+    if (item.m_dropPrefab && Info.gear.TryGetValue(hash, out var gear))
     {
-      name = gear.Item1;
+      itemHash = gear.Item1;
       variant = gear.Item2;
       return;
     }
   }
 
-  public static void OverrideItem(VisEquipment vis, VisSlot slot, ref string name)
+  public static void OverrideItem(VisEquipment vis, VisSlot slot, ref int itemHash)
   {
     int variant = 0;
-    OverrideItem(vis, slot, ref name, ref variant);
+    OverrideItem(vis, slot, ref itemHash, ref variant);
   }
 
   public static void OverrideSkinColor(VisEquipment vis, ref Vector3 color)

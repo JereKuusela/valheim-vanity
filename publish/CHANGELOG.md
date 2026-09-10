@@ -1,3 +1,7 @@
+- v1.20
+  - Fixes for the new game version.
+  - Fixes wear_crafted not applying to sheathed items.
+
 - v1.19
   - Realest fix, for real.
 
@@ -10,12 +14,3 @@
 
 - v1.16
   - Fixed for the new game version.
-
-- v1.15
-  - Fixed for the new game version.
-
-- v1.14
-  - Fixes compatibility issue with Marketplace mod.
-
-- v1.13
-  - Fixes error on dedicated server.

@@ -6,7 +6,6 @@ using System.Globalization;
 using System.IO;
 using BepInEx;
 using Service;
-using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -57,18 +56,18 @@ public class VanityEntry
 
 public class VanityInfo
 {
-  public Dictionary<string, Tuple<string, int>> gear = [];
-  public Tuple<string, int>? helmet;
-  public Tuple<string, int>? chest;
-  public Tuple<string, int>? legs;
-  public Tuple<string, int>? shoulder;
-  public Tuple<string, int>? utility;
-  public Tuple<string, int>? leftHand;
-  public Tuple<string, int>? rightHand;
-  public Tuple<string, int>? leftBack;
-  public Tuple<string, int>? rightBack;
-  public Tuple<string, int>? beard;
-  public Tuple<string, int>? hair;
+  public Dictionary<int, Tuple<int, int>> gear = [];
+  public Tuple<int, int>? helmet;
+  public Tuple<int, int>? chest;
+  public Tuple<int, int>? legs;
+  public Tuple<int, int>? shoulder;
+  public Tuple<int, int>? utility;
+  public Tuple<int, int>? leftHand;
+  public Tuple<int, int>? rightHand;
+  public Tuple<int, int>? leftBack;
+  public Tuple<int, int>? rightBack;
+  public Tuple<int, int>? beard;
+  public Tuple<int, int>? hair;
   public string skinColor = "";
   public string hairColor = "";
   public float? updateInterval;
@@ -119,11 +118,13 @@ public class VanityData
   }
 
   public static IDeserializer Deserializer() => new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance)
-    .WithTypeConverter(new FloatConverter()).Build();
+    .WithYamlFormatter(formatter).Build();
   public static IDeserializer DeserializerUnSafe() => new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance)
-  .WithTypeConverter(new FloatConverter()).IgnoreUnmatchedProperties().Build();
+  .WithYamlFormatter(formatter).IgnoreUnmatchedProperties().Build();
   public static ISerializer Serializer() => new SerializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).DisableAliases()
-    .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults).WithTypeConverter(new FloatConverter()).Build();
+    .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults).WithYamlFormatter(formatter).Build();
+
+  private static readonly YamlFormatter formatter = new() { NumberFormat = NumberFormatInfo.InvariantInfo };
 
   public static T Deserialize<T>(string raw, string fileName) where T : new()
   {
@@ -165,7 +166,7 @@ public class VanityData
       entry.name = name;
       return true;
     }
-    VanityData.Data[id] = new() { name = name };
+    Data[id] = new() { name = name };
     return true;
   }
   private static bool UpdateNetworkId(string id, string networkId)
@@ -176,7 +177,7 @@ public class VanityData
       entry.player = networkId;
       return true;
     }
-    VanityData.Data[id] = new() { player = networkId };
+    Data[id] = new() { player = networkId };
     return true;
   }
   public static void UpdatePlayerIds()
@@ -205,29 +206,3 @@ public class VanityData
     if (updated) ToFile();
   }
 }
-#nullable disable
-public class FloatConverter : IYamlTypeConverter
-{
-  public bool Accepts(Type type) => type == typeof(float);
-
-  public object ReadYaml(IParser parser, Type type) => ReadYaml(parser, type, null);
-
-  public object ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer)
-  {
-
-    var scalar = (YamlDotNet.Core.Events.Scalar)parser.Current;
-    var number = float.Parse(scalar.Value, NumberStyles.Float, CultureInfo.InvariantCulture);
-    parser.MoveNext();
-    return number;
-  }
-
-  public void WriteYaml(IEmitter emitter, object value, Type type) => WriteYaml(emitter, value, type, null);
-
-  public void WriteYaml(IEmitter emitter, object value, Type type, ObjectSerializer serializer)
-  {
-    var number = (float)value;
-    emitter.Emit(new YamlDotNet.Core.Events.Scalar(number.ToString("0.###", CultureInfo.InvariantCulture)));
-  }
-}
-
-#nullable enable

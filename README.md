@@ -36,7 +36,7 @@ Styles are saved to the config folder in file `vanity.yaml`:
 # Note: Groups can also load an another group.
   group: groupname1 groupname2
 # These replace style of a slot, regardless of which item is equipped there.
-# Item ids can be found at https://valheim.fandom.com/wiki/Item_IDs
+# Item ids can be found at https://valheim./wiki/Item_IDs
   helmet: item_id
   chest: item_id
   legs: item_id

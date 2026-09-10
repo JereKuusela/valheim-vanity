@@ -7,6 +7,7 @@ using Splatform;
 using UnityEngine;
 
 namespace Vanity;
+
 public static class Helper
 {
   public static List<string> Players()
@@ -52,13 +53,13 @@ public static class Helper
     return TryInt(args[index], defaultValue);
   }
 
-  public static Tuple<string, int> Parse(string value)
+  public static Tuple<int, int> Parse(string value)
   {
     var separators = new char[] { ',', ' ' };
     var split = value.Split(separators, StringSplitOptions.RemoveEmptyEntries).ToArray();
-    var name = split[0];
+    var itemHash = split[0].GetStableHashCode();
     var variant = TryInt(split, 1, 0);
-    return new(name, variant);
+    return new(itemHash, variant);
   }
   public static string[] ParseGroups(string value)
   {

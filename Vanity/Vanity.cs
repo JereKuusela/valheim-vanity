@@ -6,12 +6,13 @@ using ServerSync;
 using UnityEngine;
 
 namespace Vanity;
+
 [BepInPlugin(GUID, NAME, VERSION)]
 public class Vanity : BaseUnityPlugin
 {
   public const string GUID = "vanity";
   public const string NAME = "Vanity";
-  public const string VERSION = "1.19";
+  public const string VERSION = "1.20";
 #nullable disable
   public static ManualLogSource Log;
   public static CustomSyncedValue<string> VanityValue;
